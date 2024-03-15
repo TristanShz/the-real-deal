@@ -61,7 +61,6 @@ const createFixture = () => {
     whenTheUserMakesABet: async (command: MakeABetCommand) => {
       const result = await makeABetUseCase.execute(command);
 
-      console.log(result);
       if (result.isErr()) {
         thrownError = result.error;
       }
