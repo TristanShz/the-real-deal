@@ -29,7 +29,7 @@ model Match {
   teamOne      String
   teamTwo      String
   date         DateTime
-  result       Result
+  result       Result?
   bets         Bet[]
 }
 
