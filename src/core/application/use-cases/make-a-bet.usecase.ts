@@ -32,7 +32,6 @@ export class MakeABetUseCase {
     try {
       const match = await this.matchRepository.findById(command.matchId);
       const user = await this.userRepository.findById(command.userId);
-      console.log('USER :', user);
 
       if (!match) {
         throw new MatchNotFoundError();

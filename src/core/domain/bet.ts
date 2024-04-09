@@ -6,11 +6,8 @@ interface BetProps {
   odds: number;
   matchId: string;
   userId: string;
-  value: Result;
+  value: string;
 }
-
-const RESULT_VALUES = ['ONE', 'X', 'TWO'] as const;
-export type Result = (typeof RESULT_VALUES)[number];
 
 export class InvalidAmountError extends Error {}
 
