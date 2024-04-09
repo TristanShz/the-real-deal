@@ -1,4 +1,4 @@
-import { UserRepository } from 'src/core/application/user.repository';
+import { UserRepository } from 'src/core/application/ports/user.repository';
 import { User } from 'src/core/domain/user';
 
 export class InMemoryUserRepository implements UserRepository {

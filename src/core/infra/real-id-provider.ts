@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IdProvider } from '../application/id-provider';
+import { IdProvider } from '../application/ports/id-provider';
 import { v4 } from 'uuid';
 
 @Injectable()

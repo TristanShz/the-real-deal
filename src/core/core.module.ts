@@ -1,10 +1,10 @@
 import { ClassProvider, DynamicModule, Module } from '@nestjs/common';
-import { BetRepository } from './application/bet.repository';
-import { MakeABetUseCase } from './application/use-cases/make-a-bet.usecase';
+import { BetRepository } from './application/ports/bet.repository';
 import { PrismaClient } from '@prisma/client';
-import { UserRepository } from './application/user.repository';
-import { MatchRepository } from './application/match.repository';
-import { IdProvider } from './application/id-provider';
+import { UserRepository } from './application/ports/user.repository';
+import { MatchRepository } from './application/ports/match.repository';
+import { IdProvider } from './application/ports/id-provider';
+import { MakeABetUseCase } from './application/use-cases/make-a-bet/make-a-bet.usecase';
 
 @Module({})
 export class CoreModule {

@@ -1,7 +1,5 @@
-import {
-  MakeABetUseCase,
-  MakeABetCommand,
-} from 'src/core/application/use-cases/make-a-bet.usecase';
+import { MakeABetCommand } from 'src/core/application/use-cases/make-a-bet/make-a-bet.command';
+import { MakeABetUseCase } from 'src/core/application/use-cases/make-a-bet/make-a-bet.usecase';
 import { Bet } from 'src/core/domain/bet';
 import { Match } from 'src/core/domain/match';
 import { User } from 'src/core/domain/user';

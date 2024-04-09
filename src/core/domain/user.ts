@@ -1,4 +1,4 @@
-import { Entity } from '../common/entity';
+import { AggregateRoot } from '../common/aggregate-root';
 
 export interface UserProps {
   id: string;
@@ -8,7 +8,7 @@ export interface UserProps {
   balance: number;
 }
 
-export class User extends Entity<UserProps, string> {
+export class User extends AggregateRoot<UserProps> {
   constructor(props: UserProps) {
     super(props);
   }

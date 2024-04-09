@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Match } from '../domain/match';
+import { Match } from 'src/core/domain/match';
 
 @Injectable()
 export abstract class MatchRepository {

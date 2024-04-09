@@ -1,4 +1,5 @@
 import { Entity } from '../common/entity';
+import { MatchResult } from './match';
 
 interface BetProps {
   id: string;
@@ -6,7 +7,7 @@ interface BetProps {
   odds: number;
   matchId: string;
   userId: string;
-  value: string;
+  expectedResult: MatchResult;
 }
 
 export class InvalidAmountError extends Error {}
@@ -24,7 +25,7 @@ export class Bet extends Entity<BetProps, string> {
       odds: this._props.odds,
       matchId: this._props.matchId,
       userId: this._props.userId,
-      value: this._props.value,
+      expectedResult: this._props.expectedResult,
     };
   }
 
@@ -35,7 +36,7 @@ export class Bet extends Entity<BetProps, string> {
       odds: data.odds,
       matchId: data.matchId,
       userId: data.userId,
-      value: data.value,
+      expectedResult: data.expectedResult,
     });
   }
 

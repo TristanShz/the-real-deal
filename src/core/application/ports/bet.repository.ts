@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Bet } from '../domain/bet';
+import { Bet } from 'src/core/domain/bet';
 
 @Injectable()
 export abstract class BetRepository {

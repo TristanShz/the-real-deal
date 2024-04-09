@@ -1,4 +1,4 @@
-import { BetRepository } from 'src/core/application/bet.repository';
+import { BetRepository } from 'src/core/application/ports/bet.repository';
 import { Bet } from 'src/core/domain/bet';
 
 export class InMemoryBetRepository implements BetRepository {

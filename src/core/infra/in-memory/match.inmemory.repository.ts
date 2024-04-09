@@ -1,4 +1,4 @@
-import { MatchRepository } from '../../application/match.repository';
+import { MatchRepository } from '../../application/ports/match.repository';
 import { Match } from '../../domain/match';
 
 export class InMemoryMatchRepository implements MatchRepository {

@@ -1,24 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { Err, Ok } from '../../common/result';
-import { Result, Bet } from '../../domain/bet';
-import { BetRepository } from '../bet.repository';
-import { MatchRepository } from '../match.repository';
-import { UserRepository } from '../user.repository';
-
-export interface MakeABetCommand {
-  id: string;
-  amount: number;
-  odds: number;
-  value: Result;
-  matchId: string;
-  userId: string;
-}
-
-export class MatchAlreadyStartedError extends Error {}
-export class MatchNotFoundError extends Error {}
-export class MatchEndedError extends Error {}
-export class InsufficientBalanceError extends Error {}
-export class UserNotFoundError extends Error {}
+import { BetRepository } from '../../ports/bet.repository';
+import { MatchRepository } from '../../ports/match.repository';
+import { UserRepository } from '../../ports/user.repository';
+import { MakeABetCommand } from './make-a-bet.command';
+import { Bet } from '../../../domain/bet';
+import { Err, Ok } from 'src/core/common/result';
+import {
+  MatchNotFoundError,
+  UserNotFoundError,
+  MatchAlreadyStartedError,
+  MatchEndedError,
+  InsufficientBalanceError,
+} from './make-a-bet.errors';
 
 @Injectable()
 export class MakeABetUseCase {
@@ -59,6 +52,7 @@ export class MakeABetUseCase {
 
       return Ok.of(undefined);
     } catch (e) {
+      console.log('ERROR : ', e);
       return Err.of(e);
     }
   }

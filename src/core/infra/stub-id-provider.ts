@@ -1,4 +1,4 @@
-import { IdProvider } from '../application/id-provider';
+import { IdProvider } from '../application/ports/id-provider';
 
 export class StubIdProvider implements IdProvider {
   id = 'stub-id';

@@ -1,22 +1,22 @@
 import { describe, test, beforeEach } from 'vitest';
-import {
-  InsufficientBalanceError,
-  MakeABetCommand,
-  MatchAlreadyStartedError,
-  MatchEndedError,
-  MatchNotFoundError,
-  UserNotFoundError,
-} from '../application/use-cases/make-a-bet.usecase';
 import { Bet, InvalidAmountError } from '../domain/bet';
 import { Match } from '../domain/match';
 import { BetFixture, createBetFixture } from './fixtures/bet.fixture';
 import { userBuilder } from './user.builder';
+import { MakeABetCommand } from '../application/use-cases/make-a-bet/make-a-bet.command';
+import {
+  MatchNotFoundError,
+  UserNotFoundError,
+  MatchAlreadyStartedError,
+  MatchEndedError,
+  InsufficientBalanceError,
+} from '../application/use-cases/make-a-bet/make-a-bet.errors';
 
 const defaultBetCommand: MakeABetCommand = {
   id: 'id-1',
   amount: 100,
   odds: 1.5,
-  value: 'ONE',
+  expectedResult: 'ONE',
   matchId: 'id-1',
   userId: 'id-1',
 };
@@ -25,7 +25,7 @@ const defaultBet = new Bet({
   id: 'id-1',
   amount: 100,
   odds: 1.5,
-  value: 'ONE',
+  expectedResult: 'ONE',
   matchId: 'id-1',
   userId: 'id-1',
 });
@@ -110,7 +110,7 @@ describe('Feature: Make a Bet', () => {
         id: 'id-1',
         amount: -1,
         odds: 1.5,
-        value: 'ONE',
+        expectedResult: 'ONE',
         matchId: 'id-1',
         userId: 'id-1',
       });
@@ -130,7 +130,7 @@ describe('Feature: Make a Bet', () => {
         id: 'id-1',
         amount: 0,
         odds: 1.5,
-        value: 'ONE',
+        expectedResult: 'ONE',
         matchId: 'id-1',
         userId: 'id-1',
       });
@@ -151,7 +151,7 @@ describe('Feature: Make a Bet', () => {
         id: 'id-1',
         amount: 101,
         odds: 1.5,
-        value: 'ONE',
+        expectedResult: 'ONE',
         matchId: 'id-1',
         userId: 'id-1',
       });
@@ -173,7 +173,7 @@ describe('Feature: Make a Bet', () => {
         id: 'id-1',
         amount: 40,
         odds: 1.5,
-        value: 'TWO',
+        expectedResult: 'TWO',
         matchId: 'id-1',
         userId: 'id-1',
       });
@@ -181,7 +181,7 @@ describe('Feature: Make a Bet', () => {
         id: 'id-2',
         amount: 60,
         odds: 1.5,
-        value: 'X',
+        expectedResult: 'X',
         matchId: 'id-1',
         userId: 'id-1',
       });
@@ -191,7 +191,7 @@ describe('Feature: Make a Bet', () => {
           id: 'id-1',
           amount: 40,
           odds: 1.5,
-          value: 'TWO',
+          expectedResult: 'TWO',
           matchId: 'id-1',
           userId: 'id-1',
         }),
@@ -199,7 +199,7 @@ describe('Feature: Make a Bet', () => {
           id: 'id-2',
           amount: 60,
           odds: 1.5,
-          value: 'X',
+          expectedResult: 'X',
           matchId: 'id-1',
           userId: 'id-1',
         }),

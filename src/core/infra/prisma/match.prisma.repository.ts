@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { MatchRepository } from 'src/core/application/match.repository';
+import { MatchRepository } from 'src/core/application/ports/match.repository';
 import { Match } from 'src/core/domain/match';
 
 @Injectable()

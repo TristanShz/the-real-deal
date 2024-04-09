@@ -48,7 +48,7 @@ model Bet {
   odds    Int
   user    User   @relation(fields: [userId], references: [id])
   userId  String
-  value   Result
+  expectedResult   Result
   match   Match  @relation(fields: [matchId], references: [id])
   matchId String
 }

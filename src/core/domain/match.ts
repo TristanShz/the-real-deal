@@ -3,6 +3,9 @@ import { Entity } from '../common/entity';
 export const MATCH_STATUS = ['UPCOMING', 'STARTED', 'ENDED'] as const;
 export type MatchStatus = (typeof MATCH_STATUS)[number];
 
+export const MATCH_RESULTS = ['ONE', 'X', 'TWO'] as const;
+export type MatchResult = (typeof MATCH_RESULTS)[number];
+
 export interface MatchProps {
   id: string;
   status: MatchStatus;
