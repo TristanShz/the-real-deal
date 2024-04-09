@@ -1,5 +1,7 @@
+import { Injectable } from '@nestjs/common';
 import { Match } from '../domain/match';
 
-export interface MatchRepository {
-  findById(id: number): Promise<Match | undefined>;
+@Injectable()
+export abstract class MatchRepository {
+  abstract findById(id: string): Promise<Match | undefined>;
 }

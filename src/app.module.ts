@@ -1,10 +1,23 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { CoreModule } from './core';
+import { PrismaService } from './core/infra/prisma/prisma.service';
+import { PrismaUserRepository } from './core/infra/prisma/user.prisma.repository';
+import { PrismaMatchRepository } from './core/infra/prisma/match.prisma.repository';
+import { PrismaBetRepository } from './core/infra/prisma/bet.prisma.repository';
+import { RealIdProvider } from './core/infra/real-id-provider';
 
 @Module({
-  imports: [],
+  imports: [
+    CoreModule.register({
+      BetRepository: PrismaBetRepository,
+      UserRepository: PrismaUserRepository,
+      MatchRepository: PrismaMatchRepository,
+      PrismaClient: PrismaService,
+      IdProvider: RealIdProvider,
+    }),
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}

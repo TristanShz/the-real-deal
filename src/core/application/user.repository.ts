@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { User } from '../domain/user';
 
-export interface UserRepository {
-  save(user: User): Promise<void>;
-  findById(id: number): Promise<User | undefined>;
+@Injectable()
+export abstract class UserRepository {
+  abstract save(user: User): Promise<void>;
+  abstract findById(id: string): Promise<User | undefined>;
 }

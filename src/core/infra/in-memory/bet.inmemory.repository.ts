@@ -8,7 +8,11 @@ export class InMemoryBetRepository implements BetRepository {
     this.bets.push(bet);
   }
 
-  async findById(id: number): Promise<Bet | undefined> {
+  async findById(id: string): Promise<Bet | undefined> {
     return this.bets.find((bet) => bet.id === id);
+  }
+
+  async findAll(): Promise<Bet[]> {
+    return this.bets;
   }
 }

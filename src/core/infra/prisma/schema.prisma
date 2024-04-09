@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MatchStatus {
+  UPCOMING
+  STARTED
+  ENDED
+}
+
+enum Result {
+  ONE
+  X
+  TWO
+}
+
+model Match {
+  id           String      @id
+  status       MatchStatus @default(UPCOMING)
+  championship String
+  teamOne      String
+  teamTwo      String
+  date         DateTime
+  result       Result
+  bets         Bet[]
+}
+
+model User {
+  id       String @id
+  username String
+  email    String
+  password String
+  balance  Int    @default(0)
+  bets     Bet[]
+}
+
+model Bet {
+  id      String @id
+  amount  Int
+  odds    Int
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  value   Result
+  match   Match  @relation(fields: [matchId], references: [id])
+  matchId String
+}
