@@ -27,4 +27,5 @@ On veut :
 - Déduire la somme du pari dans les crédits de l'utilisateur
 - Sauvegarder le pari
 
-
+**Example Mapping**
+![exmapping](./assets/make-a-bet-ex-mapping.png)
