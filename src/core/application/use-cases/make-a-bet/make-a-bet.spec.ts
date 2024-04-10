@@ -3,18 +3,18 @@ import {
   BetFixture,
   createBetFixture,
 } from 'src/core/__tests__/fixtures/bet.fixture';
-import { Bet } from 'src/core/domain/bet';
+import {
+  Bet,
+  InvalidAmountError,
+  MatchAlreadyStartedError,
+  MatchEndedError,
+  MatchNotFoundError,
+} from 'src/core/domain/bet';
 import { Match } from 'src/core/domain/match';
 import { InsufficientBalanceError } from 'src/core/domain/user';
 import { describe, test, beforeEach } from 'vitest';
 import { MakeABetCommand } from './make-a-bet.command';
-import {
-  MatchNotFoundError,
-  UserNotFoundError,
-  MatchAlreadyStartedError,
-  MatchEndedError,
-  InvalidAmountError,
-} from './make-a-bet.errors';
+import { UserNotFoundError } from './make-a-bet.errors';
 
 const defaultBetCommand: MakeABetCommand = {
   id: 'id-1',
@@ -71,7 +71,6 @@ describe('Feature: Make a Bet', () => {
         userId: 'user-1',
       });
 
-      console.log('BALANCE ::: ', user.balance);
       await fixture.thenBetShouldBe(
         Bet.fromData({
           id: 'bet-1',

@@ -52,6 +52,14 @@ export class User extends AggregateRoot<UserProps, string> {
     return this._props.role;
   }
 
+  get email() {
+    return this._props.email;
+  }
+
+  get username() {
+    return this._props.username;
+  }
+
   get data(): UserData {
     return {
       id: this._props.id,

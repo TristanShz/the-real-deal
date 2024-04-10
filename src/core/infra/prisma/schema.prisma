@@ -22,6 +22,11 @@ enum Result {
   TWO
 }
 
+enum UserRoles {
+  MEMBER
+  BOOKMAKER
+}
+
 model Match {
   id           String      @id
   status       MatchStatus @default(UPCOMING)
@@ -31,6 +36,7 @@ model Match {
   date         DateTime
   result       Result?
   bets         Bet[]
+  odds         Odds[]
 }
 
 model User {
@@ -38,8 +44,10 @@ model User {
   username String
   email    String
   password String
+  role UserRoles @default(MEMBER)
   balance  Int    @default(0)
   bets     Bet[]
+  odds     Odds[]
 }
 
 model Bet {
@@ -52,3 +60,14 @@ model Bet {
   match   Match  @relation(fields: [matchId], references: [id])
   matchId String
 }
+
+model Odds {
+  id     String @id
+    teamOne Int
+    teamTwo Int
+    draw    Int
+    match  Match @relation(fields: [matchId], references: [id])
+    matchId String
+    user    User  @relation(fields: [userId], references: [id])
+    userId  String
+  }

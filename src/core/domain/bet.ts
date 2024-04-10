@@ -1,8 +1,3 @@
-import {
-  InvalidAmountError,
-  MatchAlreadyStartedError,
-  MatchEndedError,
-} from '../application/use-cases/make-a-bet/make-a-bet.errors';
 import { AggregateRoot } from '../common/aggregate-root';
 import { Match, MatchResult } from './match';
 import { InsufficientBalanceError, User } from './user';
@@ -25,10 +20,50 @@ interface BetData {
   odds?: number;
 }
 
+export class MatchNotFoundError extends Error {
+  constructor() {
+    super('Match not found');
+  }
+}
+
+export class MatchAlreadyStartedError extends Error {
+  constructor() {
+    super('Match already started');
+  }
+}
+
+export class MatchEndedError extends Error {
+  constructor() {
+    super('Match ended');
+  }
+}
+
+export class InvalidAmountError extends Error {
+  constructor() {
+    super('Bet amount must be greater than 0');
+  }
+}
+
 export class Bet extends AggregateRoot<BetProps, string> {
   constructor(props: BetProps) {
     super(props);
     this.validate();
+  }
+
+  get user() {
+    return this._props.user;
+  }
+
+  get amount() {
+    return this._props.amount;
+  }
+
+  get expectedResult() {
+    return this._props.expectedResult;
+  }
+
+  get match() {
+    return this._props.match;
   }
 
   get odds() {
@@ -38,7 +73,7 @@ export class Bet extends AggregateRoot<BetProps, string> {
     );
   }
 
-  get data(): BetData {
+  get data() {
     return {
       id: this._props.id,
       amount: this._props.amount,

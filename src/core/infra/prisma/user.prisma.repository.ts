@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { UserMap } from 'src/core/application/mappers/user.map';
 import { UserRepository } from 'src/core/application/ports/user.repository';
 import { User } from 'src/core/domain/user';
 
@@ -12,7 +13,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { id },
     });
 
-    return userData ? User.fromData(userData) : undefined;
+    return userData ? UserMap.toDomain(userData) : undefined;
   }
 
   async register(user: User, password: string) {
