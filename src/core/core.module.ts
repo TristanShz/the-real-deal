@@ -5,6 +5,8 @@ import { UserRepository } from './application/ports/user.repository';
 import { MatchRepository } from './application/ports/match.repository';
 import { IdProvider } from './application/ports/id-provider';
 import { MakeABetUseCase } from './application/use-cases/make-a-bet/make-a-bet.usecase';
+import { RegisterUseCase } from './application/use-cases/register/register.usecase';
+import { PasswordHelper } from './application/ports/password-helper';
 
 @Module({})
 export class CoreModule {
@@ -14,11 +16,13 @@ export class CoreModule {
     MatchRepository: ClassProvider<MatchRepository>['useClass'];
     PrismaClient: ClassProvider<PrismaClient>['useClass'];
     IdProvider: ClassProvider<IdProvider>['useClass'];
+    PasswordHelper: ClassProvider<PasswordHelper>['useClass'];
   }): DynamicModule {
     return {
       module: CoreModule,
       providers: [
         MakeABetUseCase,
+        RegisterUseCase,
         {
           provide: BetRepository,
           useClass: providers.BetRepository,
@@ -39,8 +43,12 @@ export class CoreModule {
           provide: IdProvider,
           useClass: providers.IdProvider,
         },
+        {
+          provide: PasswordHelper,
+          useClass: providers.PasswordHelper,
+        },
       ],
-      exports: [MakeABetUseCase, IdProvider],
+      exports: [MakeABetUseCase, RegisterUseCase, IdProvider],
     };
   }
 }

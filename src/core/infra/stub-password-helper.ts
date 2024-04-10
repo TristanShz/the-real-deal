@@ -7,7 +7,7 @@ export class StubPasswordHelper implements PasswordHelper {
     return this.hashPrefix + password;
   }
 
-  decode(password: string): string {
-    return password.replace(this.hashPrefix, '');
+  compare(password: string, hash: string): boolean {
+    return hash === this.hashPrefix + password;
   }
 }

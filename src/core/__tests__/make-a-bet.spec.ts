@@ -2,7 +2,7 @@ import { describe, test, beforeEach } from 'vitest';
 import { Bet, InvalidAmountError } from '../domain/bet';
 import { Match } from '../domain/match';
 import { BetFixture, createBetFixture } from './fixtures/bet.fixture';
-import { userBuilder } from './user.builder';
+import { userBuilder } from './builders/user.builder';
 import { MakeABetCommand } from '../application/use-cases/make-a-bet/make-a-bet.command';
 import {
   MatchNotFoundError,

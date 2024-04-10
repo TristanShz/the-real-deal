@@ -7,7 +7,7 @@ import { Err, Ok } from 'src/core/common/result';
 import { PasswordHelper } from '../../ports/password-helper';
 
 @Injectable()
-export class RegisterUsecase {
+export class RegisterUseCase {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly passwordHelper: PasswordHelper,

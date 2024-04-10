@@ -1,11 +1,7 @@
-import { beforeEach, describe, expect, expectTypeOf, test } from 'vitest';
-import { StubIdProvider } from '../infra/stub-id-provider';
-import { StubPasswordHelper } from '../infra/stub-password-helper';
-import { RegisterUsecase } from '../application/use-cases/register/register.usecase';
-import { InMemoryUserRepository } from '../infra/in-memory/user.inmemory.repository';
-import { RegisterCommand } from '../application/use-cases/register/register.command';
+import { beforeEach, describe, test } from 'vitest';
 import { InvalidPasswordError, User } from '../domain/user';
 import { EntityValidationError } from '../common/errors';
+import { UserFixture, createUserFixture } from './fixtures/user.fixture';
 
 describe('Feature: Register', () => {
   let fixture: UserFixture;
@@ -55,40 +51,3 @@ describe('Feature: Register', () => {
     });
   });
 });
-
-const createUserFixture = () => {
-  const idProvider = new StubIdProvider();
-  const passwordHelper = new StubPasswordHelper();
-  const userRepository = new InMemoryUserRepository();
-  const registerUseCase = new RegisterUsecase(
-    userRepository,
-    passwordHelper,
-    idProvider,
-  );
-
-  let thrownError: any;
-  return {
-    givenPredefinedId(id: string) {
-      idProvider.id = id;
-    },
-    async whenTheUserRegisters(command: RegisterCommand) {
-      const result = await registerUseCase.execute(command);
-      console.log(result);
-
-      if (result.isErr()) {
-        thrownError = result.error;
-      }
-    },
-    async thenUserShouldBeRegistered(user: User) {
-      const registeredUser = await userRepository.findById(user.id);
-
-      expect(registeredUser).toEqual(user);
-    },
-
-    thenErrorShouldBe(error: any) {
-      expectTypeOf(error).toEqualTypeOf(thrownError);
-    },
-  };
-};
-
-export type UserFixture = ReturnType<typeof createUserFixture>;
