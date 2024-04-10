@@ -1,5 +1,9 @@
 # The Real Deal
 
+## Modélisation
+
+![class](./assets/class.png)
+
 ## Use Cases
 
 ### Make a bet
