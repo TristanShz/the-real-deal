@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 
 @Injectable()
 export class RealIdProvider implements IdProvider {
-  provide() {
+  generate() {
     return v4();
   }
 }

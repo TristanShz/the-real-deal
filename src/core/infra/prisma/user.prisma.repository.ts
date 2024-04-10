@@ -15,9 +15,12 @@ export class PrismaUserRepository implements UserRepository {
     return userData ? User.fromData(userData) : undefined;
   }
 
-  async save(user: User) {
+  async register(user: User, password: string) {
     await this.prisma.user.create({
-      data: user.data,
+      data: {
+        ...user.data,
+        password,
+      },
     });
   }
 }

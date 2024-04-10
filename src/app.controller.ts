@@ -36,7 +36,7 @@ export class AppController {
     }
 
     const makeABetCommand: MakeABetCommand = {
-      id: this.idProvider.provide(),
+      id: this.idProvider.generate(),
       ...body,
     };
 

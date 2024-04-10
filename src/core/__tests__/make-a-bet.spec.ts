@@ -64,6 +64,7 @@ describe('Feature: Make a Bet', () => {
     });
 
     test("The user can't bet on a match after it start", async () => {
+      fixture.givenSomeUsersExists([userBuilder().withId('id-1').build()]);
       fixture.givenSomeMatchesExist([
         new Match({ id: 'id-1', status: 'STARTED' }),
       ]);
@@ -76,6 +77,7 @@ describe('Feature: Make a Bet', () => {
 
   describe("Rule: You can't bet on a game that's ended", () => {
     test("The user can't bet on a match after it end", async () => {
+      fixture.givenSomeUsersExists([userBuilder().withId('id-1').build()]);
       fixture.givenSomeMatchesExist([
         new Match({ id: 'id-1', status: 'ENDED' }),
       ]);
