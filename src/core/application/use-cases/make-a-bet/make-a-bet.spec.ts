@@ -1,33 +1,38 @@
+import { userBuilder } from 'src/core/__tests__/builders/user.builder';
+import {
+  BetFixture,
+  createBetFixture,
+} from 'src/core/__tests__/fixtures/bet.fixture';
+import { Bet } from 'src/core/domain/bet';
+import { Match } from 'src/core/domain/match';
+import { InsufficientBalanceError } from 'src/core/domain/user';
 import { describe, test, beforeEach } from 'vitest';
-import { Bet, InvalidAmountError } from '../domain/bet';
-import { Match } from '../domain/match';
-import { BetFixture, createBetFixture } from './fixtures/bet.fixture';
-import { userBuilder } from './builders/user.builder';
-import { MakeABetCommand } from '../application/use-cases/make-a-bet/make-a-bet.command';
+import { MakeABetCommand } from './make-a-bet.command';
 import {
   MatchNotFoundError,
   UserNotFoundError,
   MatchAlreadyStartedError,
   MatchEndedError,
-  InsufficientBalanceError,
-} from '../application/use-cases/make-a-bet/make-a-bet.errors';
+  InvalidAmountError,
+} from './make-a-bet.errors';
 
 const defaultBetCommand: MakeABetCommand = {
   id: 'id-1',
   amount: 100,
-  odds: 1.5,
   expectedResult: 'ONE',
   matchId: 'id-1',
   userId: 'id-1',
 };
 
+const testMatch = new Match({ id: 'id-1', status: 'UPCOMING' });
+const testUser = userBuilder().withId('id-1').build();
 const defaultBet = new Bet({
   id: 'id-1',
   amount: 100,
   odds: 1.5,
   expectedResult: 'ONE',
-  matchId: 'id-1',
-  userId: 'id-1',
+  user: testUser,
+  match: testMatch,
 });
 
 describe('Feature: Make a Bet', () => {
@@ -53,14 +58,29 @@ describe('Feature: Make a Bet', () => {
     });
 
     test('The user can bet on a match before it start', async () => {
-      fixture.givenSomeUsersExists([userBuilder().withId('id-1').build()]);
-      fixture.givenSomeMatchesExist([
-        new Match({ id: 'id-1', status: 'UPCOMING' }),
-      ]);
+      const user = userBuilder().withId('user-1').withBalance(150).build();
+      const match = new Match({ id: 'match-1', status: 'UPCOMING' });
+      fixture.givenSomeUsersExists([user]);
+      fixture.givenSomeMatchesExist([match]);
 
-      await fixture.whenTheUserMakesABet(defaultBetCommand);
+      await fixture.whenTheUserMakesABet({
+        id: 'bet-1',
+        amount: 100,
+        expectedResult: 'ONE',
+        matchId: 'match-1',
+        userId: 'user-1',
+      });
 
-      await fixture.thenBetShouldBe(defaultBet);
+      console.log('BALANCE ::: ', user.balance);
+      await fixture.thenBetShouldBe(
+        Bet.fromData({
+          id: 'bet-1',
+          amount: 100,
+          expectedResult: 'ONE',
+          match,
+          user,
+        }),
+      );
     });
 
     test("The user can't bet on a match after it start", async () => {
@@ -111,7 +131,6 @@ describe('Feature: Make a Bet', () => {
       await fixture.whenTheUserMakesABet({
         id: 'id-1',
         amount: -1,
-        odds: 1.5,
         expectedResult: 'ONE',
         matchId: 'id-1',
         userId: 'id-1',
@@ -131,7 +150,6 @@ describe('Feature: Make a Bet', () => {
       await fixture.whenTheUserMakesABet({
         id: 'id-1',
         amount: 0,
-        odds: 1.5,
         expectedResult: 'ONE',
         matchId: 'id-1',
         userId: 'id-1',
@@ -152,7 +170,6 @@ describe('Feature: Make a Bet', () => {
       await fixture.whenTheUserMakesABet({
         id: 'id-1',
         amount: 101,
-        odds: 1.5,
         expectedResult: 'ONE',
         matchId: 'id-1',
         userId: 'id-1',
@@ -164,17 +181,15 @@ describe('Feature: Make a Bet', () => {
 
   describe('Rule: The user can make several bets on same match', () => {
     test('The user make a second bet on a match', async () => {
-      fixture.givenSomeUsersExists([
-        userBuilder().withId('id-1').withBalance(100).build(),
-      ]);
-      fixture.givenSomeMatchesExist([
-        new Match({ id: 'id-1', status: 'UPCOMING' }),
-      ]);
+      const user = userBuilder().withId('id-1').withBalance(100).build();
+      const match = new Match({ id: 'id-1', status: 'UPCOMING' });
+
+      fixture.givenSomeUsersExists([user]);
+      fixture.givenSomeMatchesExist([match]);
 
       await fixture.whenTheUserMakesABet({
         id: 'id-1',
         amount: 40,
-        odds: 1.5,
         expectedResult: 'TWO',
         matchId: 'id-1',
         userId: 'id-1',
@@ -182,7 +197,6 @@ describe('Feature: Make a Bet', () => {
       await fixture.whenTheUserMakesABet({
         id: 'id-2',
         amount: 60,
-        odds: 1.5,
         expectedResult: 'X',
         matchId: 'id-1',
         userId: 'id-1',
@@ -192,20 +206,35 @@ describe('Feature: Make a Bet', () => {
         new Bet({
           id: 'id-1',
           amount: 40,
-          odds: 1.5,
           expectedResult: 'TWO',
-          matchId: 'id-1',
-          userId: 'id-1',
+          match,
+          user,
         }),
         new Bet({
           id: 'id-2',
           amount: 60,
-          odds: 1.5,
           expectedResult: 'X',
-          matchId: 'id-1',
-          userId: 'id-1',
+          match,
+          user,
         }),
       ]);
+    });
+  });
+
+  describe("Rule: The user's balance must be updated after a bet", () => {
+    test("The user's balance is updated after a bet", async () => {
+      const user = userBuilder().withId('user-1').withBalance(100).build();
+      const match = new Match({ id: 'match-1', status: 'UPCOMING' });
+      fixture.givenSomeUsersExists([user]);
+      fixture.givenSomeMatchesExist([match]);
+      await fixture.whenTheUserMakesABet({
+        id: 'bet-1',
+        amount: 40,
+        expectedResult: 'TWO',
+        matchId: 'match-1',
+        userId: 'user-1',
+      });
+      await fixture.thenUserShouldHaveBalance(60, 'user-1');
     });
   });
 });

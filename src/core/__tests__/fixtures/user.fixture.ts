@@ -23,7 +23,6 @@ export const createUserFixture = () => {
     },
     async whenTheUserRegisters(command: RegisterCommand) {
       const result = await registerUseCase.execute(command);
-      console.log(result);
 
       if (result.isErr()) {
         thrownError = result.error;

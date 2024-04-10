@@ -30,8 +30,6 @@ export const createBetFixture = () => {
     whenTheUserMakesABet: async (command: MakeABetCommand) => {
       const result = await makeABetUseCase.execute(command);
 
-      console.log('RESULT : : ', result);
-
       if (result.isErr()) {
         thrownError = result.error;
       }
@@ -44,6 +42,12 @@ export const createBetFixture = () => {
     thenBetsShouldContain: async (expectedBets: Bet[]) => {
       const bets = await betRepository.findAll();
       expect(bets).toEqual(expect.arrayContaining(expectedBets));
+    },
+
+    async thenUserShouldHaveBalance(amount: number, userId: string) {
+      const user = await userRepository.findById(userId);
+
+      expect(user?.balance).toEqual(amount);
     },
 
     thenErrorShouldBe: (expectedError: any) => {

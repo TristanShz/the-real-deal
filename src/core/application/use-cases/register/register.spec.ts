@@ -1,7 +1,10 @@
+import {
+  UserFixture,
+  createUserFixture,
+} from 'src/core/__tests__/fixtures/user.fixture';
+import { EntityValidationError } from 'src/core/common/errors';
+import { User, InvalidPasswordError } from 'src/core/domain/user';
 import { beforeEach, describe, test } from 'vitest';
-import { InvalidPasswordError, User } from '../domain/user';
-import { EntityValidationError } from '../common/errors';
-import { UserFixture, createUserFixture } from './fixtures/user.fixture';
 
 describe('Feature: Register', () => {
   let fixture: UserFixture;
@@ -18,6 +21,7 @@ describe('Feature: Register', () => {
         username: 'John',
         email: 'johndoe@gmail.com',
         password: 'qwerty123',
+        role: 'MEMBER',
       });
 
       await fixture.thenUserShouldBeRegistered(
@@ -25,6 +29,7 @@ describe('Feature: Register', () => {
           id: 'id-1',
           username: 'John',
           email: 'johndoe@gmail.com',
+          role: 'MEMBER',
         }),
       );
     });
@@ -33,6 +38,7 @@ describe('Feature: Register', () => {
         username: 'John',
         email: 'invalid-email',
         password: 'qwerty123',
+        role: 'MEMBER',
       });
 
       fixture.thenErrorShouldBe(EntityValidationError);
@@ -45,6 +51,7 @@ describe('Feature: Register', () => {
         username: 'John',
         email: 'johndoe@gmail.com',
         password: '1234567',
+        role: 'MEMBER',
       });
 
       fixture.thenErrorShouldBe(InvalidPasswordError);

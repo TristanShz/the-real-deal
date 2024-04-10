@@ -13,13 +13,14 @@ export class MatchEndedError extends Error {
     super('Match ended');
   }
 }
-export class InsufficientBalanceError extends Error {
-  constructor() {
-    super('Insufficient balance');
-  }
-}
 export class UserNotFoundError extends Error {
   constructor() {
     super('User not found');
+  }
+}
+
+export class InvalidAmountError extends Error {
+  constructor() {
+    super('Bet amount must be greater than 0');
   }
 }

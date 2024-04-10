@@ -1,19 +1,21 @@
-import { User } from '../domain/user';
+import { User, UserRole } from '../../domain/user';
 
 export const userBuilder = ({
   id = 'stub-id',
   username = 'john doe',
   email = 'johndoe@gmail.com',
   password = 'password',
+  role = 'MEMBER',
   balance = 100,
 }: {
   id?: string;
   username?: string;
   email?: string;
   password?: string;
+  role?: UserRole;
   balance?: number;
 } = {}) => {
-  const props = { id, username, email, password, balance };
+  const props = { id, username, email, password, role, balance };
 
   return {
     withId(id: string) {
@@ -30,6 +32,12 @@ export const userBuilder = ({
     },
     withBalance(balance: number) {
       return userBuilder({ ...props, balance });
+    },
+    asBookmaker() {
+      return userBuilder({ ...props, role: 'BOOKMAKER' });
+    },
+    asMember() {
+      return userBuilder({ ...props, role: 'MEMBER' });
     },
     build() {
       return User.fromData(props);

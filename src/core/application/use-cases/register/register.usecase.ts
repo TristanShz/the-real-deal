@@ -24,6 +24,7 @@ export class RegisterUseCase {
         id,
         username: command.username,
         email: command.email,
+        role: command.role,
       });
 
       await this.userRepository.register(user, password);

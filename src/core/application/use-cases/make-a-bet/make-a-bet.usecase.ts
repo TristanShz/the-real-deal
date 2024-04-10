@@ -5,13 +5,7 @@ import { UserRepository } from '../../ports/user.repository';
 import { MakeABetCommand } from './make-a-bet.command';
 import { Bet } from '../../../domain/bet';
 import { Err, Ok } from 'src/core/common/result';
-import {
-  MatchNotFoundError,
-  UserNotFoundError,
-  MatchAlreadyStartedError,
-  MatchEndedError,
-  InsufficientBalanceError,
-} from './make-a-bet.errors';
+import { MatchNotFoundError, UserNotFoundError } from './make-a-bet.errors';
 
 @Injectable()
 export class MakeABetUseCase {
@@ -34,19 +28,15 @@ export class MakeABetUseCase {
         throw new UserNotFoundError();
       }
 
-      if (match.status === 'STARTED') {
-        throw new MatchAlreadyStartedError();
-      }
+      const bet = new Bet({
+        id: command.id,
+        amount: command.amount,
+        expectedResult: command.expectedResult,
+        match,
+        user,
+      });
 
-      if (match.status === 'ENDED') {
-        throw new MatchEndedError();
-      }
-
-      if (user.balance < command.amount) {
-        throw new InsufficientBalanceError();
-      }
-
-      const bet = new Bet(command);
+      bet.make();
 
       await this.betRepository.save(bet);
 
